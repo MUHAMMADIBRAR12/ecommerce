@@ -13,6 +13,8 @@ use App\Http\Controllers\webControllers\Accountant_BookkeeperController;
 use App\Http\Controllers\webControllers\BusinessController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Hcm\DepartmentController;
+use App\Http\Controllers\webControllers\IndividualBusinessController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +30,7 @@ use App\Http\Controllers\Hcm\DepartmentController;
 
 Route::get('/', 'AuthenticationController@homemain');
 Route::View('individual', 'web.individualLogin')->name('individual.login');
-Route::get('individualbusiness', 'web.individualbusiness')->name('individualbusiness.login');
+Route::get('individual/business', 'web.individualbusiness')->name('individualbusiness.login');
 Route::View('business', 'web.business')->name('business.login');
 Route::View('bookkeeper', 'web.bookkeeperLogin')->name('bookkeeper.login');
 
