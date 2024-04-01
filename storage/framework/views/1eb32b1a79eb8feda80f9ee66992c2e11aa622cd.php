@@ -294,7 +294,7 @@ unset($__errorArgs, $__bag); ?>
                                         <input type="file" name="profile" class="dropify">
                                     </div>
                                 </div>
-                                <div class="row clearfix m-auto float-right">
+                                <div class="row clearfix m-auto">
                                     <button class="btn btn-success save" type="submit" id="save">Save</button>
                                 </div>
                             </form>

@@ -92,8 +92,8 @@
                                         class=" form-control show-tick ms select2" required>
                                         <option value="" selected disabled>Select Type</option>
                                         @php
-                                            $relatedTo = $project ? 'project' : null;
-                                            // dd($projectFind);
+                                            $relatedTo = $priority ? 'priority' : null;
+                                    
                                             $relatedOptions = appLib::$related_to;
                                         @endphp
                                         @foreach ($relatedOptions as $related_to)
