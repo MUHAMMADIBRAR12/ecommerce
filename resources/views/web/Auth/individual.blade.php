@@ -256,7 +256,7 @@
                             </div>
                             <div class="input-control">
                                 <label for="Phone" class="input-label" hidden>Phone No</label>
-                                <input type="phone" name="phone" id="phone" class="input-field" placeholder="Phone No">
+                                <input type="tel" name="phone" id="phone" class="input-field" placeholder="Phone No">
                             </div>
                             <div class="input-control">
                                 <label for="email" class="input-label" hidden>Email</label>

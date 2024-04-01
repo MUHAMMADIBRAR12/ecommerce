@@ -27,9 +27,10 @@ use App\Http\Controllers\Hcm\DepartmentController;
 
 
 Route::get('/', 'AuthenticationController@homemain');
-Route::View('individual/login', 'web.individualLogin')->name('individual.login');
-Route::View('business/login', 'web.business')->name('business.login');
-Route::View('bookkeeper/login', 'web.bookkeeperLogin')->name('bookkeeper.login');
+Route::View('individual', 'web.individualLogin')->name('individual.login');
+Route::get('individualbusiness', 'web.individualbusiness')->name('individualbusiness.login');
+Route::View('business', 'web.business')->name('business.login');
+Route::View('bookkeeper', 'web.bookkeeperLogin')->name('bookkeeper.login');
 
 
 

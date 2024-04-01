@@ -12,6 +12,8 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@20.3.0/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@20.3.0/build/js/intlTelInput.min.js"></script>
 
     <title>indvidiual</title>
 
@@ -215,6 +217,14 @@ text-decoration: none;
                                     <input type="phone" name="phone" id="phone" class="input-fieldd form-control"
                                         placeholder="">
                                 </div>
+                                <script>
+                                    const input = document.querySelector("#phone");
+                                    window.intlTelInput(input, {
+                                        initialCountry: "us",
+                                        strictMode: true,
+                                    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@20.3.0/build/js/utils.js",
+                                    });
+                                </script>
                                 <div class="input-control form-group">
                                     <label for="email" class="fw-bold">Email:</label>
                                     <input type="email" name="email" id="email" class="input-fieldd form-control"
