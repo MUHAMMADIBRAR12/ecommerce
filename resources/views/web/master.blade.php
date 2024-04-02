@@ -924,12 +924,14 @@ a:active {
     </div>
   </nav>
 </header>
+<body>
+<section class="content">
+<div class="row">
+      @yield('content')
+</div>
+</section>
 
-
-
-                @yield('content')
-            </div>
-        </div>
+            
         
   <!--===--============-=---------------------============================== FOTTER=START----------------------------------------------------------- -->
 

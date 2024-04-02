@@ -924,12 +924,14 @@ a:active {
     </div>
   </nav>
 </header>
+<body>
+<section class="content">
+<div class="row">
+      <?php echo $__env->yieldContent('content'); ?>
+</div>
+</section>
 
-
-
-                <?php echo $__env->yieldContent('content'); ?>
-            </div>
-        </div>
+            
         
   <!--===--============-=---------------------============================== FOTTER=START----------------------------------------------------------- -->
 

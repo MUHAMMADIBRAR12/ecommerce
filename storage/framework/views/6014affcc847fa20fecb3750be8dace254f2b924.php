@@ -762,6 +762,5 @@ text-decoration: none;
 
     </div>
     </div>
-
 </body>
 </html><?php /**PATH C:\xampp\htdocs\app\resources\views/web/individualLogin.blade.php ENDPATH**/ ?>
