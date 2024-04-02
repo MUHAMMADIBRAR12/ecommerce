@@ -359,10 +359,10 @@ a:active {
                 <div class=" col-7  collapse navbar-collapse" id="nav2" >
                 
                     <ul class="navbar-nav ms-auto">
-
+<!-- 
                         <li class="nav-item">
                             <a class="nav-link UppernavbarFontClass" style="color:black;" id="nav2" href=""><b>Pakistan</b> : +92 300 1234567</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link  UppernavbarFontClass" style="color:black;" id="nav2" href=""><b>Email</b> : hi@monmatics.com</a>
                         </li>

@@ -9,6 +9,6 @@ use Illuminate\Support\Facades\DB;
 class IndividualBusinessController extends Controller
 {
     public function individualReg(){
-        return view('web.individualbusiness');
+        return view('web.Auth.individualbusiness');
     }
 }

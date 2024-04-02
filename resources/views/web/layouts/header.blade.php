@@ -22,9 +22,9 @@
                 <div class="collapse navbar-collapse" id="nav2" style="margin-right:100px">
                     <ul class="navbar-nav ms-auto">
 
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link mx-2 UppernavbarFontClass" style="color:  black;" id="nav2" href="#"><b>Pakistan</b> : +92 300 1234567</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link mx-2 UppernavbarFontClass" style="color:  black;" id="nav2" href="#"><b>Email</b> : hi@monmatics.com</a>
                         </li>

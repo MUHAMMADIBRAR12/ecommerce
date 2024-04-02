@@ -29,10 +29,15 @@ use App\Http\Controllers\webControllers\IndividualBusinessController;
 
 
 Route::get('/', 'AuthenticationController@homemain');
-Route::View('individual', 'web.individualLogin')->name('individual.login');
-Route::get('individual/business', 'web.individualbusiness')->name('individualbusiness.login');
-Route::View('business', 'web.business')->name('business.login');
-Route::View('bookkeeper', 'web.bookkeeperLogin')->name('bookkeeper.login');
+Route::View('individual/login', 'web.individualLogin')->name('individual.login');
+// Route::get('individual/login', function () {
+//     return redirect('individual/login');                        
+
+Route::View('individualbusiness/login', 'web.individualbusiness')->name('individualbusiness.login');
+Route::View('business/login', 'web.business')->name('business.login');
+Route::View('select/login', 'web.select')->name('select.login');
+Route::View('company/login', 'web.company')->name('company.login');
+Route::View('bookkeeper/login', 'web.bookkeeperLogin')->name('bookkeeper.login');
 
 
 

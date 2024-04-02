@@ -448,10 +448,10 @@ a:active {
                     <ul class="navbar-nav ms-auto">
 
                         <li class="nav-item">
-                            <a href="tel:+92 300 1234567" class="nav-link UppernavbarFontClass" style="color:black;" id="nav2" href=""><b>Pakistan</b> : +92 300 1234567</a>
+                            <!-- <a href="tel:+92 300 1234567" class="nav-link UppernavbarFontClass" style="color:black;" id="nav2" href=""><b>Pakistan</b> : +92 300 1234567</a> -->
                         </li>
                         <li class="nav-item">
-                            <a href="mailto: hi@monmatics.com"  class="nav-link  UppernavbarFontClass" style="color:black;" id="nav2" href=""><b>Email</b> : hi@monmatics.com</a>
+                            <a href="mailto: hi@monmatics.com"  class="nav-link  UppernavbarFontClass" style="color:black;" id="nav2" href=""><b> <img src="<?php echo e(asset('public/assets/images/🦆 icon _Gmail_.svg')); ?>" alt="" ></b> : hi@monmatics.com</a>
                         </li>
                            <li class="nav-item dropdown">
                             <a href="<?php echo e(url('authentication/login')); ?>" class="nav-link mx-2 navbarFontClass  " style="color:  #023C82" id="nav2" role="button" aria-expanded="false">
