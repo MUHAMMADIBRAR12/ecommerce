@@ -1,8 +1,32 @@
 
-
 <?php $__env->startSection('page-style'); ?>
-
 <style>
+    .bgc{
+  background-image:url('<?php echo e(asset('public/assets/images/Background.svg')); ?>');
+  background-repeat:100% 100%;
+  
+}
+.bg{
+    background: linear-gradient(180deg, #C6D5E8 0%, rgba(255, 255, 255, 0) 100%);
+    border: 1px solid #D9D9D9;
+    border-radius:10px;
+}
+
+
+.wrapper {
+
+max-width:32rem;
+width: 100%;
+margin: 2rem auto;
+margin-top: 80px;
+padding: 2rem 2.5rem;
+border: 2px solid #000;
+outline: none;
+border-radius: 2.25rem;
+color:black;
+background: #f2f5f8;
+}
+
 .form {
 /* width:300px; */
 /* height: 520px; */
@@ -36,13 +60,92 @@ border: 1px solid #D9D9D9;
 border-radius:10px;
 
 }
-</style>
+.input-control {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 1.25rem
+}
 
+
+.input-field {
+font-family: inherit;
+font-size: 1rem;
+font-weight: 400;
+line-height: inherit;
+width: 80%;
+height: auto;
+padding: .3rem 1.25rem;
+border: none;
+outline: none;
+border-radius: 2rem;
+color:black;
+/* border-bottom: 1px solid #ccc; */
+background:white;
+background: linear-gradient(180deg, #C6D5E8 0%, rgba(255, 255, 255, 0) 100%);
+border: 1px solid #D9D9D9;
+border-radius:10px;
+}
+.input-fieldd{
+font-family: inherit;
+font-size: 1rem;
+font-weight: 400;
+line-height: inherit;
+width: 80%;
+height: 27px;;
+padding: .3rem 1.25rem;
+border: none;
+outline: none;
+/* border-radius: 2rem; */
+color:black;
+border-bottom: 1px solid #ccc;
+/* border: 1px solid #000; */
+background:#F2F5F8;
+}
+.input-state{
+font-family: inherit;
+font-size: 1rem;
+font-weight: 400;
+line-height: inherit;
+width:70%;
+height: auto;
+padding: .3rem 1.15rem;
+border: none;
+outline: none;
+border-radius: 2rem;
+color:black;
+margin-left:17%;
+/* border-bottom: 1px solid #ccc; */
+background:white;
+background: linear-gradient(180deg, #C6D5E8 0%, rgba(255, 255, 255, 0) 100%);
+border: 1px solid #D9D9D9;
+border-radius:10px;
+}
+.input-submit {
+font-family: inherit;
+font-size: 1rem;
+font-weight: 500;
+line-height: inherit;
+cursor: pointer;
+min-width: 40%;
+height: auto;
+padding: .65rem 1.25rem;
+border: none;
+outline: none;
+border-radius: 2rem;
+color:white;
+background:orange;
+}
+.btn-login{
+color:orange;
+}
+a{
+text-decoration: none;
+}
+</style>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-
-
 <div class="bgc">
         <img src="" alt="">
     <div class="container-fluid loginBackground pb-5">
@@ -57,7 +160,7 @@ border-radius:10px;
                                     </a>
                                 </div>
 
-                                <h4 class="text text-center "><b>Create Your Account</b></h4>
+                                <h4 class="text text-center "><b>Business Detail</b></h4>
                                 <h6  class="text-center">Already have an account? <a href="<?php echo e(url('authentication/login')); ?>">
 
                                 <span class="btn-login">Log In</span>
@@ -66,28 +169,13 @@ border-radius:10px;
 
                             </div>
                             <form name=""  method="" class="form">
-
-                                <div class="input-control  position-relative ">
-                                    <label for="Sir Name" class=" "><b>Sir Name:</b></label>
-                                    <select name="sir_name" class="input-sirname position-absolute  form-control" style="left:20%">
-                                        <option value="">Select</option>
-                                        <option value="Mr">Mr</option>
-                                        <option value="Mrs">Mrs</option>
-                                    </select>
-                                </div>
-
-                                <div class="input-control ">
-                                    <label for="fname" class="fw-bold">First Name:</label>
-                                    <input type="text" name="first_name" id="fname" class="input-fieldd"
-                                        placeholder="">
-                                </div>
                                 <div class="input-control form-group">
-                                    <label for="lname" class="fw-bold">Last Name:</label>
+                                    <label for="lname" class="fw-bold">Company Name:</label>
                                     <input type="text" name="last_name" id="lname" class="input-fieldd form-control"
                                         placeholder="">
                                 </div>
                                 <div class="input-control form-group">
-                                    <label for="Phone" class="fw-bold">Phone:</label>
+                                    <label for="Phone" class="fw-bold">Company Phone:</label>
                                     <input type="phone" name="phone" id="phone" class="input-fieldd form-control"
                                         placeholder="">
                                 </div>
@@ -104,7 +192,11 @@ border-radius:10px;
                                     <input type="email" name="email" id="email" class="input-fieldd form-control"
                                         placeholder="">
                                 </div>
-
+                                <div class="input-control form-group">
+                                    <label for="address" class="fw-bold">Address:</label>
+                                    <input type="text" name="address" id="address" class="input-fieldd form-control"
+                                        placeholder="">
+                                </div>
                                 <div class="input-control form-group">
                                     <label for="Country" class="input-label "><b>Country:</b></label>
                                     <select name="country" class="input-field form-control ">
@@ -135,22 +227,26 @@ border-radius:10px;
                                                 placeholder="">
                                         </div>
                                     </div>
-                                    <div class="input-control text-center" >
-                                        <a href="<?php echo e(url('individualbusiness/login')); ?>">Create Account</a>
-                                        <!-- <input type="submit" class="input-submit orange" value="Create Account" style="    margin: auto;"> -->
+                                 </div>
+                                    <div class="row">
+                                    <div class="col-md-8">
+                                    <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="image" class="custom-file-input" id="exampleInputFile">
+                                        <label class="custom-file-label text-primary" for="exampleInputFile">Upload logo</label>
                                     </div>
                                 </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-control form-group">
+                                        <a class="btn btn-primary" href="<?php echo e(url('company')); ?>" role="button">Next</a>
+                                        </div>
                             </form>
                         </section>
 
             </div>
         </main>
-                                </div>
-                                </div>
-
-
-
+    </div>
+    </div>
 <?php $__env->stopSection(); ?>
-
-
 <?php echo $__env->make('web.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\app\resources\views/web/individualbusiness.blade.php ENDPATH**/ ?>

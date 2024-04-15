@@ -10,11 +10,10 @@ class IndividualController extends Controller
 {
 
     public function individualReg(){
-        return view('web.Auth.individual');
+        return view('web.Auth.individuallogin');
     }
     public function individual_Create(Request $request)
     {
-        // Validate the input data
         // $request->validate([
         //     'first_name' => 'required|max:50',
         //     'last_name' => 'required|max:50',
@@ -26,7 +25,7 @@ class IndividualController extends Controller
         // ]);
 
         // Insert the data into the database using query builder
-        $affected = DB::table('reg_individuals')->insert([
+        $data = DB::connection('mysql1')->table('reg_individuals')->insert([
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
             'phone' => $request->input('phone'),
@@ -37,14 +36,15 @@ class IndividualController extends Controller
         ]);
 
         // Check if the insertion was successful
-        if ($affected) {
+        if ($data) {
             // Optionally, you can redirect to a success page or return a response
             echo "data inserted";
             // return redirect()->back()->with('success', 'Individual registration created successfully.');
-        } else {
-            // Handle the case where the insertion failed
-            echo "data not inserted";
-            // return redirect()->back()->with('error', 'Failed to create individual registration.');
         }
+        // else {
+        //     // Handle the case where the insertion failed
+        //     echo "data not inserted";
+        //     // return redirect()->back()->with('error', 'Failed to create individual registration.');
+        // }
     }
 }

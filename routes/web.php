@@ -29,14 +29,18 @@ use App\Http\Controllers\webControllers\IndividualBusinessController;
 
 
 Route::get('/', 'AuthenticationController@homemain');
-Route::View('individual/login', 'web.individualLogin')->name('individual.login');
-// Route::get('individual/login', function () {
-//     return redirect('individual/login');                        
+// Route::('individual/login', 'web.Auth.individuallogin')->name('individual.login');
+// Route::post('/individual/create', [IndividualController::class, 'individual_Create'])->name('individual.create');
+Route::get('individual', 'webControllers\IndividualController@individualReg')->name('individual.login');
+Route::post('individual/create', 'webControllers\IndividualController@individual_Create')->name('individual.create');
 
-Route::View('individualbusiness/login', 'web.individualbusiness')->name('individualbusiness.login');
-Route::View('business/login', 'web.business')->name('business.login');
-Route::View('select/login', 'web.select')->name('select.login');
-Route::View('company/login', 'web.company')->name('company.login');
+// Route::get('individual/login', function () {
+//     return redirect('individual/login');
+
+Route::View('individualbusiness', 'web.individualbusiness')->name('individualbusiness.login');
+Route::View('business', 'web.business')->name('business.login');
+Route::View('select', 'web.select')->name('select.login');
+Route::View('company', 'web.company')->name('company.login');
 Route::View('bookkeeper/login', 'web.bookkeeperLogin')->name('bookkeeper.login');
 
 
@@ -56,7 +60,7 @@ Route::middleware('set_db')->group(function () {
     // ****************************** Authentication ********************************
     // Route::get('/', function () { return redirect('authentication/login'); });
     Route::get('login', function () {
-        return redirect('authentication/login');                        
+        return redirect('authentication/login');
     });
     Route::get('authentication', function () {
         return redirect('authentication/login');

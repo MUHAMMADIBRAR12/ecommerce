@@ -17,6 +17,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
 
     <!-- <script type="text/javascript" defer="defer" src="https://odoocdn.com/web/assets/1/f7cc3e4/web.assets_frontend_minimal.min.js" onerror="__odooAssetError=1"></script>
     <script type="text/javascript" defer="defer" onerror="__odooAssetError=1" src="https://odoocdn.com/web/assets/1/18ef698/web.assets_frontend_lazy.min.js"></script>
@@ -421,11 +422,6 @@ a:active {
             <p>Processing...</p>
         </div>
     </div>
-
-
-   
-<section class="">
-        <div class="">
        
                 <!-- Header content will go here -->
             
@@ -451,7 +447,8 @@ a:active {
                             <!-- <a href="tel:+92 300 1234567" class="nav-link UppernavbarFontClass" style="color:black;" id="nav2" href=""><b>Pakistan</b> : +92 300 1234567</a> -->
                         </li>
                         <li class="nav-item">
-                            <a href="mailto: hi@monmatics.com"  class="nav-link  UppernavbarFontClass" style="color:black;" id="nav2" href=""><b> <img src="{{ asset('public/assets/images/🦆 icon _Gmail_.svg')}}" alt="" ></b> : hi@monmatics.com</a>
+                            <a href="mailto: hi@monmatics.com"  class="nav-link  UppernavbarFontClass" style="color:black;" id="nav2" href=""><b><img class="" src="{{ asset('public/assets/icon/email.png')}}"
+                    height="30px" alt=""></b> : hi@monmatics.com</a>
                         </li>
                            <li class="nav-item dropdown">
                             <a href="{{url('authentication/login')}}" class="nav-link mx-2 navbarFontClass  " style="color:  #023C82" id="nav2" role="button" aria-expanded="false">

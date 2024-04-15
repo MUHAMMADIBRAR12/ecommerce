@@ -20,15 +20,15 @@ use Laravel\Sanctum\HasApiTokens;
 
 class AuthController extends Controller
 {
-  
-    
+
+
 
     private function dbconn( $database,$username, $password)
     {
         // $database ='monmatics_development';
         // $username = 'root';
         // $password = '';
-    
+
         $dbConnection = [
             'driver' => 'mysql',
             'host' => '127.0.0.1',
@@ -41,7 +41,7 @@ class AuthController extends Controller
             'prefix' => '',
             'strict' => true,
             'engine' => null,
-        ]; 
+        ];
 
         Config::set('database.connections.APICONN', $dbConnection);
         config(['database.default' => 'APICONN']);
@@ -103,7 +103,7 @@ class AuthController extends Controller
     }
 
    public function login(Request $request)
-{ 
+{
     $request->validate([
         'email' => 'required',
         'password' => 'required',
@@ -111,7 +111,7 @@ class AuthController extends Controller
 
     // Fetch user from the main database
     $user = User::where('email', $request->email)->first();
-  
+
 
     if (!$user) {
         $data = [
@@ -119,9 +119,9 @@ class AuthController extends Controller
             'result' => false,
             'message' => 'User not found'
         ];   return response()->json($data, 404);
-    }   
+    }
 
-    
+
     // Connect to the user's specific database
     $dbConnection = [
         'driver' => 'mysql',
@@ -135,11 +135,11 @@ class AuthController extends Controller
         'prefix' => '',
         'strict' => true,
         'engine' => null,
-    ]; 
+    ];
     Config::set('database.connections.custom_connection', $dbConnection);
     // Establish a database connection to the user's specific database
     $database = DB::connection('custom_connection');
-    
+
     // Fetch user data from the user's specific database
     $userData = $database->table('users')->where('email', $request->email)->first();
 
@@ -151,9 +151,9 @@ class AuthController extends Controller
         ];
         return response()->json($data, 404);
     }
-    
-   
-   
+
+
+
     // Generate token
     // $plainTextToken = $user->createToken('app')->plainTextToken;
 
@@ -176,7 +176,26 @@ class AuthController extends Controller
     return response($response, 200);
 }
 
+public function getUsers(Request $request)
+{
+    $this->dbconn($request->db_name, $request->db_username, $request->db_password);
 
+    $users=DB::table('users')
+    ->select('id','parent_id','email','email_verified_at','created_at','updated_at','ntn','role','firstName','lastName','profile','status','route')
+    ->get();
+
+    if ($users->isEmpty()) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No users found',
+        ]);
+    }
+
+    return response()->json([
+        'status' => 200,
+        'data' => $users,
+    ]);
+}
 
     public function saveNotes(Request $request)
     {
@@ -188,12 +207,12 @@ class AuthController extends Controller
             'subject' => $request->subject,
             'related_to_type' => $request->related_to_type,
             'related_id' => $request->related_ID,
-            'assigned_to' => $request->assign_ID,  
+            'assigned_to' => $request->assign_ID,
             'description' => $request->description,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
-        
+
         $res = DB::table('crm_notes')->insert($data);
 
         if ($res) {
@@ -210,12 +229,12 @@ class AuthController extends Controller
     }
 
     public function getNotes(Request $request)
-    {    
+    {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
         // Check if the request includes a valid bearer token
                 if ($request->has('id')) {
                     $userId = $request->input('id');
-                
+
                     // Check if the user exists in your database
                     $user = User::find($userId);
 
@@ -226,13 +245,13 @@ class AuthController extends Controller
                         ]);
                     }
                    // Establish custom database connection
-                    
+
                  //  Fetch notes for the authenticated user using the custom connection
                     $notes = DB::table('crm_notes')
                         ->select('id', 'subject', 'related_to_type', 'related_id', 'assigned_to', 'description')
                         ->where('assigned_to', $userId)
                         ->get();
-            
+
                     // Check if notes are found for the user
                     if ($notes->isEmpty()) {
                         return response()->json([
@@ -240,7 +259,7 @@ class AuthController extends Controller
                             'message' => 'No notes found for the logged-in user',
                         ]);
                     }
-            
+
                     // Return notes if found
                     return response()->json([
                         'status' => 200,
@@ -254,17 +273,17 @@ class AuthController extends Controller
                     ]);
                 }
             }
-            
+
             // } else {
             //     // Return 401 status if token is not provided
             //     return response()->json([
             //         'status' => 401,
             //         'message' => 'Token not provided',
             //     ]);
-            
-        
+
+
     public function saveTasks(Request $request)
-    { 
+    {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
 
         try {
@@ -327,14 +346,14 @@ class AuthController extends Controller
         $tasks = DB::table('crm_tasks')
             ->select('id', 'subject', 'start_date', 'priority',  'description','assigned_to')
             ->get();
-    
+
         if ($tasks->isEmpty()) {
             return response()->json([
                 'status' => 404,
                 'message' => 'No tasks found',
             ]);
         }
-    
+
         return response()->json([
             'status' => 200,
             'data' => $tasks,
@@ -420,18 +439,18 @@ class AuthController extends Controller
     {
         $userId = $request->userId;
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-        $leads = DB::table('crm_customers')                    
+        $leads = DB::table('crm_customers')
             ->where('lead', '=','1')
             ->where('created_by', '=', $userId)
             ->get();
-    
+
         if ($leads->isEmpty()) {
             return response()->json([
                 'status' => 404,
                 'message' => 'No Lead found',
             ]);
         }
-    
+
         return response()->json([
             'status' => 200,
             'data' => $leads,
@@ -441,9 +460,9 @@ class AuthController extends Controller
 
     public function saveCalls(Request $request)
     {
-       
+
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-        
+
         try {
 
             $request->validate([
@@ -459,9 +478,9 @@ class AuthController extends Controller
                 'description' => 'required',
 
             ]);
-            
+
             $id = str::uuid()->toString();
-            
+
             $start_date = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d h:i:s');
             $end_date = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d h:i:s');
 
@@ -515,14 +534,14 @@ class AuthController extends Controller
         $calls = DB::table('crm_calls')
             ->select( 'subject', 'start_date', 'status',  'related_to_type','contact_id')
             ->get();
-    
+
         if ($calls->isEmpty()) {
             return response()->json([
                 'status' => 404,
                 'message' => 'No Calls found',
             ]);
         }
-    
+
         return response()->json([
             'status' => 200,
             'data' => $calls,
@@ -566,16 +585,16 @@ class AuthController extends Controller
                     'message' => 'Contact Save Failed',
                 ]);
             }
-  
+
         }catch(Exception $e){
             $data = [
                 'status' => 0,
                 'result' => false,
                 'message' => $e->getMessage()
-            ]; 
-            return response($data, 404); 
+            ];
+            return response($data, 404);
         }
- 
+
         return redirect($request->backURL);
         //return redirect()->back();
     }
@@ -587,14 +606,14 @@ class AuthController extends Controller
         $contacts = DB::table('crm_contacts')
             ->select('id', 'first_name', 'last_name', 'mobile',  'email')
             ->get();
-    
+
         if ($contacts->isEmpty()) {
             return response()->json([
                 'status' => 404,
                 'message' => 'No contacts found',
             ]);
         }
-    
+
         return response()->json([
             'status' => 200,
             'data' => $contacts,

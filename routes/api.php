@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('get_users', [AuthController::class, 'getUsers']);
 
 Route::post('save_notes', [AuthController::class, 'saveNotes']);
 Route::get('get_notes', [AuthController::class, 'getNotes']);
