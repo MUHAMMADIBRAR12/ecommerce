@@ -200,7 +200,8 @@ public function getUsers(Request $request)
     public function saveNotes(Request $request)
     {
      $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-
+     
+        $companyId = session('companyId');
         $id = str::uuid()->toString();
         $data = [
             'id' => $id,
@@ -209,6 +210,7 @@ public function getUsers(Request $request)
             'related_id' => $request->related_ID,
             'assigned_to' => $request->assign_ID,
             'description' => $request->description,
+            // "company_id" => $companyId,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
@@ -280,7 +282,71 @@ public function getUsers(Request $request)
             //         'status' => 401,
             //         'message' => 'Token not provided',
             //     ]);
+            public function deleteNotes(Request $request)
+            {
+                $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+            
+                // Check if the note exists
+                $note = DB::table('crm_notes')->find($request->id);
+                if (!$note) {
+                    return response()->json([
+                        'status' => 404,
+                        'message' => 'Note not found',
+                    ]);
+                }
+                // Delete the note
+                $res = DB::table('crm_notes')->where('id', $request->id)->delete();
+                // $res = DB::table('crm_notes')->where('id', $request->id)->update(['deleted_at' => now()]);
 
+                if ($res) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Note deleted successfully',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Failed to delete note',
+                    ]);
+                }
+            }
+            
+        public function updateNotes(Request $request){
+                $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+
+                try {
+                    $note = DB::table('crm_notes')->find($request->id); // Corrected spelling of $request
+                    if (!$note) { // Added a missing $ sign before "note"
+                        return response()->json([
+                            'status' => 404,
+                            'message' => 'Note not found',
+                        ]);
+                        
+                    } else {
+                        DB::beginTransaction(); // Corrected typo in method name
+            
+                        DB::table('crm_notes')->where('id', $request->id) // Added where condition to specify which note to update
+                            ->update([
+                                'subject' => $request->subject,
+                                'related_to_type' => $request->related_to_type,
+                                // 'related_id' => $request->related_ID,
+                                // 'assigned_to' => $request->assign_ID,
+                                'description' => $request->description,
+                            ]);
+            
+                        DB::commit(); // Moved commit inside the else block
+                    }
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    // Optionally handle the exception or log it
+                    $note([
+                        'status' => 0,
+                        'result' => false,
+                        'message' => $e->getMessage()
+                    ]);
+                }
+            }
+            
 
     public function saveTasks(Request $request)
     {
@@ -288,17 +354,17 @@ public function getUsers(Request $request)
 
         try {
 
-            $request->validate([
-                'subject' => 'required',
-                'status' => 'required',
-                'related_to_type' => 'required',
-                'related_id' => 'required',
-                'contact_id' => 'required',
-                'priority' => 'required',
-                'assigned_to' => 'required',
-                'description' => 'required',
+            // $request->validate([
+            //     'subject' => 'required',
+            //     // 'status' => 'required',
+            //     // 'related_to_type' => 'required',
+            //     // 'related_id' => 'required',
+            //     // 'contact_id' => 'required',
+            //     // 'priority' => 'required',
+            //     // 'assigned_to' => 'required',
+            //     // 'description' => 'required',
 
-            ]);
+            // ]);
 
             $id = str::uuid()->toString();
             $data = [
@@ -313,6 +379,7 @@ public function getUsers(Request $request)
                 "priority" => $request->priority,
                 "assigned_to" => $request->assign_ID,
                 "description" => $request->description,
+                "company_id" => $companyId,
                 "created_date" => Carbon::now(),
 
             ];
@@ -344,7 +411,7 @@ public function getUsers(Request $request)
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
 
         $tasks = DB::table('crm_tasks')
-            ->select('id', 'subject', 'start_date', 'priority',  'description','assigned_to')
+            ->select('id', 'subject', 'start_date','due_date','status','related_to_type','contact_id', 'priority',  'description','assigned_to')
             ->get();
 
         if ($tasks->isEmpty()) {
@@ -382,6 +449,9 @@ public function getUsers(Request $request)
             $userId = Auth::id();
             $data = array(
                 "name" => $request->name,
+                // "email" => $request->email,
+                // "phone" => $request->phone,
+                // "address" => $request->address,
                 "category" => $request->category,
                 "note" => $request->note,
                 "lead" => 1,
@@ -488,7 +558,8 @@ public function getUsers(Request $request)
             //dd($start_time);
            // $end_time = sprintf('%02d:%02d', $request->e_hour[0], $request->e_minute[0]);
 
-
+           $companyId = session('companyId');
+            $userId = Auth::id();
             $data = [
                 "id" => $id,
                 "subject" => $request->subject,
@@ -501,6 +572,7 @@ public function getUsers(Request $request)
                 "communication_type" => $request->communication_type,
                 "assigned_to" => $request->assign_ID ? $request->assign_ID : (Auth::check() ? Auth::user()->id : null),
                 "description" => $request->description,
+                "company_id" => $companyId,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),
             ];
@@ -567,6 +639,12 @@ public function getUsers(Request $request)
                 "mobile" => $request->mobile,
                 "email" => $request->email,
                 "phone_office" => $request->office_phone,
+                // "address"=>$request->address,
+                // "city"=>$request->city,
+                // "state"=>$request->state,
+                // "postal_code"=>$request->postal_code,
+                // "country"=>$request->country,
+                // "description"=>$request->description,
                 "company_id" => $companyId,
                 "user_id" => $userId,
                 "created_at" => Carbon::now(),
@@ -617,6 +695,67 @@ public function getUsers(Request $request)
         return response()->json([
             'status' => 200,
             'data' => $contacts,
+        ]);
+    }
+    public function saveCustomers(Request $request)
+    {
+        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+       
+        // $userId = Auth::id();
+        // $companyId = session('companyId');
+        //$id = str::uuid()->toString();
+        $customers = array(
+            // "mr" => $request->type,
+             "id" => str::uuid()->toString(),
+            "name" => $request->name,
+            "category" => $request->category,
+            "tax_number" => $request->tax_number ,
+            "note" => $request->note,
+            "type" => $request->type,
+            "credit_limit" => $request->credit_limit,
+            "credit_amount" => $request->credit_amount,
+            "margin" => $request->margin,
+            "lead" => $request->lead,
+            "lead_source" => $request->lead_source,
+            // "company_id" => $companyId,
+            "created_at" => Carbon::now(),
+            // "updated_at" => Carbon::now(),
+
+        );
+        $res= DB::table('crm_customers')->insert($customers);
+
+        if ($res) {
+            return response()->json([
+                'status' => 201,
+                'message' => 'Customer saved successfully'
+            ]);
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => 'Customer save failed'
+            ]);
+        }
+ 
+    }
+
+    public function getCustomers(Request $request)
+    {
+        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+
+        $customers = DB::table('crm_customers')
+            ->select('id', 'name', 'category', 'note',  'status',  'type')
+            ->get();
+
+        if ($customers->isEmpty()) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No customers found',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => $customers,
         ]);
     }
 }

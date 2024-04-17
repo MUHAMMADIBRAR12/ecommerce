@@ -32,7 +32,7 @@ Route::get('/', 'AuthenticationController@homemain');
 // Route::('individual/login', 'web.Auth.individuallogin')->name('individual.login');
 // Route::post('/individual/create', [IndividualController::class, 'individual_Create'])->name('individual.create');
 Route::get('individual', 'webControllers\IndividualController@individualReg')->name('individual.login');
-Route::post('individual/create', 'webControllers\IndividualController@individual_Create')->name('individual.create');
+Route::match(['get','post'],'individual/create', 'webControllers\IndividualController@individualCreate')->name('individual.create');
 
 // Route::get('individual/login', function () {
 //     return redirect('individual/login');

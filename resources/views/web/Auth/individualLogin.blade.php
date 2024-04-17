@@ -90,7 +90,7 @@ border-radius:10px;
 font-family: inherit;
 font-size: 1rem;
 font-weight: 400;
-line-height: inherit;
+m,line-height: inherit;
 width: 80%;
 height: 27px;;
 padding: .3rem 1.25rem;
@@ -148,8 +148,6 @@ text-decoration: none;
 @section('content')  
 <div class="bgc">
         <img src="" alt="">
-    <div class="container-fluid loginBackground pb-5">
-
         <main class="main">
             <div class="container">
             <section class="wrapper">
@@ -168,7 +166,7 @@ text-decoration: none;
                                 </a> </h6>
 
                             </div>
-                            <form action="{{ route('individual.create') }}" name=""  method="post" class="form">
+                            <form action="{{ route('individual.create') }}" name=""  method="POST" class="form">
                                 @csrf
                                 <div class="input-control  position-relative ">
                                     <label for="Sir Name" class=" "><b>Sir Name:</b></label>
@@ -178,15 +176,15 @@ text-decoration: none;
                                         <option value="Mrs">Mrs</option>
                                     </select>
                                 </div>
-
+ 
                                 <div class="input-control ">
                                     <label for="fname" class="fw-bold">First Name:</label>
-                                    <input type="text" name="first_name" id="fname" class="input-fieldd"
+                                    <input type="text" name="first_name" id="first_name" class="input-fieldd"
                                         placeholder="">
                                 </div>
                                 <div class="input-control form-group">
                                     <label for="lname" class="fw-bold">Last Name:</label>
-                                    <input type="text" name="last_name" id="lname" class="input-fieldd form-control"
+                                    <input type="text" name="last_name" id="last_name" class="input-fieldd form-control"
                                         placeholder="">
                                 </div>
                                 <div class="input-control form-group">
@@ -239,9 +237,9 @@ text-decoration: none;
                                         </div>
                                     </div>
                                     <div class="input-control text-center ml-5" >
-                                        <a class="btn btn-primary" type="submit"name="submit" href="{{ url('individualbusiness') }}">create Account</a>
-                                    <!-- <button type="submit" name="submit" class="btn btn-primary">Submit</button> -->
-                                        <!-- <input type="submit" class="input-submit orange" value="Create Account" style="    margin: auto;"> -->
+                                        {{--  <a class="btn btn-primary" type="submit"name="submit" href="#">create Account</a>  --}}
+                                     <button type="submit" name="submit" class="btn btn-primary">Submit</button> 
+                                    {{--  <input type="submit" class="input-submit orange" value="Create Account" style="    margin: auto;">   --}}
                                     </div>
                                 </div>
                             </form>

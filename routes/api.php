@@ -27,6 +27,10 @@ Route::get('get_users', [AuthController::class, 'getUsers']);
 
 Route::post('save_notes', [AuthController::class, 'saveNotes']);
 Route::get('get_notes', [AuthController::class, 'getNotes']);
+
+Route::delete('delete_notes', [AuthController::class, 'deleteNotes']);
+Route::put('update_notes',[AuthController::class,'updateNotes']);
+
 Route::post('save_tasks', [AuthController::class, 'saveTasks']);
 Route::get('get_tasks', [AuthController::class, 'getTasks']);
 Route::post('save_leads', [AuthController::class, 'saveLeads']);
@@ -36,6 +40,7 @@ Route::get('get_calls', [AuthController::class, 'getCalls']);
 Route::post('save_contacts', [AuthController::class, 'saveContacts']);
 Route::get('get_contacts', [AuthController::class, 'getContacts']);
 Route::get('search_customer', [AuthController::class, 'searchCustomer']);
+Route::post('save_customers',[AuthController::class,'saveCustomers']);
 Route::get('get_customers', [AuthController::class, 'getCustomers']);
 
 
