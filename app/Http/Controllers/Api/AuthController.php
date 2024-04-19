@@ -197,12 +197,12 @@ public function getUsers(Request $request)
     ]);
 }
 
-    public function saveNotes(Request $request)
+   public function saveOrUpdateNote(Request $request, $id = null)
     {
      $this->dbconn($request->db_name, $request->db_username, $request->db_password);
      
         $companyId = session('companyId');
-        $id = str::uuid()->toString();
+        // $id = str::uuid()->toString();
         $data = [
             'id' => $id,
             'subject' => $request->subject,
@@ -214,20 +214,21 @@ public function getUsers(Request $request)
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
-
+      if($request->id){
+        $res = DB::table('crm_notes')->where('id', '=', $request->id)->update($data);
+        $message= $res ? 'Note updated successfully' : 'update failed';
+      }else{
+        // $id = str::uuid()->toString();
         $res = DB::table('crm_notes')->insert($data);
+        $message = $res ? 'Note saved successfully': 'Save Failed';
+      }
 
-        if ($res) {
+
             return response()->json([
-                'status' => 201,
-                'message' => 'Note saved successfully',
+                'status' => $res ? 201 : 404,
+                'message' => $message,
             ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Save Failed',
-            ]);
-        }
+        
     }
 
     public function getNotes(Request $request)
@@ -348,7 +349,7 @@ public function getUsers(Request $request)
             }
             
 
-    public function saveTasks(Request $request)
+    public function saveorUpdateTasks(Request $request, $id=null)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
 
@@ -366,6 +367,7 @@ public function getUsers(Request $request)
 
             // ]);
 
+            $companyId = session('companyId');
             $id = str::uuid()->toString();
             $data = [
                 "id" => $id,
@@ -381,10 +383,13 @@ public function getUsers(Request $request)
                 "description" => $request->description,
                 "company_id" => $companyId,
                 "created_date" => Carbon::now(),
-
             ];
-
+    if ($request->id){
+        $res = DB::table('crm_tasks')->where('id','=',$request->id)->update($data);
+        $message = $res ? 'Task updated successfully' : 'save failed';
+}
             $res = DB::table('crm_tasks')->insert($data);
+            $message = $res ? 'Task saved successfully' : 'save failed';
             if ($res) {
                 return response()->json([
                     'status' => 201,
@@ -572,7 +577,7 @@ public function getUsers(Request $request)
                 "communication_type" => $request->communication_type,
                 "assigned_to" => $request->assign_ID ? $request->assign_ID : (Auth::check() ? Auth::user()->id : null),
                 "description" => $request->description,
-                "company_id" => $companyId,
+                // "company_id" => $companyId,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),
             ];
@@ -649,6 +654,7 @@ public function getUsers(Request $request)
                 "user_id" => $userId,
                 "created_at" => Carbon::now(),
             );
+
             $id = str::uuid()->toString();
             $contact['id'] = $id;
             $res =  DB::table('crm_contacts')->insert($contact);
@@ -702,7 +708,7 @@ public function getUsers(Request $request)
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
        
         // $userId = Auth::id();
-        // $companyId = session('companyId');
+         $companyId = session('companyId');
         //$id = str::uuid()->toString();
         $customers = array(
             // "mr" => $request->type,
@@ -717,7 +723,7 @@ public function getUsers(Request $request)
             "margin" => $request->margin,
             "lead" => $request->lead,
             "lead_source" => $request->lead_source,
-            // "company_id" => $companyId,
+           "company_id" => $companyId,
             "created_at" => Carbon::now(),
             // "updated_at" => Carbon::now(),
 
@@ -757,5 +763,20 @@ public function getUsers(Request $request)
             'status' => 200,
             'data' => $customers,
         ]);
+    }
+
+     public function getCompanyid(Request $request)
+    {
+        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+        $userId = Auth::id();       
+        $companyId = session('companyId');
+        return response()->json([
+            'status' => 200,
+            'companyd' => $companyId,
+            'userid' => $userId,
+        ]);
+
+
+         
     }
 }

@@ -25,6 +25,8 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('get_users', [AuthController::class, 'getUsers']);
 
+ Route::match(['post','put'],'/save-or-update_note/{id?}', [AuthController::class, 'saveOrUpdateNote']);
+
 Route::post('save_notes', [AuthController::class, 'saveNotes']);
 Route::get('get_notes', [AuthController::class, 'getNotes']);
 
@@ -42,6 +44,7 @@ Route::get('get_contacts', [AuthController::class, 'getContacts']);
 Route::get('search_customer', [AuthController::class, 'searchCustomer']);
 Route::post('save_customers',[AuthController::class,'saveCustomers']);
 Route::get('get_customers', [AuthController::class, 'getCustomers']);
+Route::get('get_company_id', [AuthController::class, 'getCompanyid']);
 
 
 // Route::post('save_data', [TestControllr::class, 'saveData']);
