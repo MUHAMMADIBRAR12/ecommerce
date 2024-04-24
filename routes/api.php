@@ -25,26 +25,30 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('get_users', [AuthController::class, 'getUsers']);
 
- Route::match(['post','put'],'/save-or-update_note/{id?}', [AuthController::class, 'saveOrUpdateNote']);
-
-Route::post('save_notes', [AuthController::class, 'saveNotes']);
+Route::post('/save-or-update_note/{id?}', [AuthController::class, 'saveOrUpdateNote']);
 Route::get('get_notes', [AuthController::class, 'getNotes']);
-
 Route::delete('delete_notes', [AuthController::class, 'deleteNotes']);
-Route::put('update_notes',[AuthController::class,'updateNotes']);
-
-Route::post('save_tasks', [AuthController::class, 'saveTasks']);
+Route::post('save-or-update-task/{id?}', [AuthController::class, 'saveOrUpdateTask']);
 Route::get('get_tasks', [AuthController::class, 'getTasks']);
-Route::post('save_leads', [AuthController::class, 'saveLeads']);
+Route::delete('delete_tasks', [AuthController::class, 'deleteTasks']);
+
+Route::post('save-or-update_leads', [AuthController::class, 'saveOrUpdateLeads']);
 Route::get('get_leads', [AuthController::class, 'getLeads']);
+
 Route::post('save_calls', [AuthController::class, 'saveCalls']);
+Route::post('save-or-update-call', [AuthController::class, 'saveOrUpdateCalls']);
 Route::get('get_calls', [AuthController::class, 'getCalls']);
-Route::post('save_contacts', [AuthController::class, 'saveContacts']);
+Route::delete('delete_calls', [AuthController::class, 'deleteCalls']);
+
+Route::post('save-or-update_contacts', [AuthController::class, 'saveOrUpdateContacts']);
 Route::get('get_contacts', [AuthController::class, 'getContacts']);
 Route::get('search_customer', [AuthController::class, 'searchCustomer']);
-Route::post('save_customers',[AuthController::class,'saveCustomers']);
+Route::post('save-or-update_customers',[AuthController::class,'saveOrUpdateCustomers']);
 Route::get('get_customers', [AuthController::class, 'getCustomers']);
+Route::post('save-or-update_opportunity',[AuthController::class,'saveOrUpdateOpportunity']);
+Route::get('get_opportunity',[AuthController::class,'getOpportunity']);
 Route::get('get_company_id', [AuthController::class, 'getCompanyid']);
+
 
 
 // Route::post('save_data', [TestControllr::class, 'saveData']);

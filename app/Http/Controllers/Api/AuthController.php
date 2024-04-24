@@ -197,14 +197,15 @@ public function getUsers(Request $request)
     ]);
 }
 
-   public function saveOrUpdateNote(Request $request, $id = null)
+   public function saveOrUpdateNote(Request $request)
     {
      $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-     
+     // check if id exisit
+     $existingRecord = DB::table('crm_notes')->where('id', $request->id)->first();
         $companyId = session('companyId');
-        // $id = str::uuid()->toString();
+        // 
         $data = [
-            'id' => $id,
+            'id' => $request->id,
             'subject' => $request->subject,
             'related_to_type' => $request->related_to_type,
             'related_id' => $request->related_ID,
@@ -214,11 +215,11 @@ public function getUsers(Request $request)
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
-      if($request->id){
+      if($existingRecord){
         $res = DB::table('crm_notes')->where('id', '=', $request->id)->update($data);
         $message= $res ? 'Note updated successfully' : 'update failed';
-      }else{
-        // $id = str::uuid()->toString();
+      }else{        
+        
         $res = DB::table('crm_notes')->insert($data);
         $message = $res ? 'Note saved successfully': 'Save Failed';
       }
@@ -312,49 +313,51 @@ public function getUsers(Request $request)
                 }
             }
             
-        public function updateNotes(Request $request){
-                $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+        // public function updateNotes(Request $request){
+        //         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
 
-                try {
-                    $note = DB::table('crm_notes')->find($request->id); // Corrected spelling of $request
-                    if (!$note) { // Added a missing $ sign before "note"
-                        return response()->json([
-                            'status' => 404,
-                            'message' => 'Note not found',
-                        ]);
+        //         try {
+        //             $note = DB::table('crm_notes')->find($request->id); // Corrected spelling of $request
+        //             if (!$note) { // Added a missing $ sign before "note"
+        //                 return response()->json([
+        //                     'status' => 404,
+        //                     'message' => 'Note not found',
+        //                 ]);
                         
-                    } else {
-                        DB::beginTransaction(); // Corrected typo in method name
+        //             } else {
+        //                 DB::beginTransaction(); // Corrected typo in method name
             
-                        DB::table('crm_notes')->where('id', $request->id) // Added where condition to specify which note to update
-                            ->update([
-                                'subject' => $request->subject,
-                                'related_to_type' => $request->related_to_type,
-                                // 'related_id' => $request->related_ID,
-                                // 'assigned_to' => $request->assign_ID,
-                                'description' => $request->description,
-                            ]);
+        //                 DB::table('crm_notes')->where('id', $request->id) // Added where condition to specify which note to update
+        //                     ->update([
+        //                         'subject' => $request->subject,
+        //                         'related_to_type' => $request->related_to_type,
+        //                         // 'related_id' => $request->related_ID,
+        //                         // 'assigned_to' => $request->assign_ID,
+        //                         'description' => $request->description,
+        //                     ]);
             
-                        DB::commit(); // Moved commit inside the else block
-                    }
-                } catch (\Exception $e) {
-                    DB::rollback();
-                    // Optionally handle the exception or log it
-                    $note([
-                        'status' => 0,
-                        'result' => false,
-                        'message' => $e->getMessage()
-                    ]);
-                }
-            }
+        //                 DB::commit(); // Moved commit inside the else block
+        //             }
+        //         } catch (\Exception $e) {
+        //             DB::rollback();
+        //             // Optionally handle the exception or log it 
+        //             $note([
+        //                 'status' => 0,
+        //                 'result' => false,
+        //                 'message' => $e->getMessage()
+        //             ]);
+        //         }
+        //     }
             
 
-    public function saveorUpdateTasks(Request $request, $id=null)
+    public function saveorUpdateTask(Request $request, $id=null)
     {
-        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+        
+       
+        
 
         try {
-
+            
             // $request->validate([
             //     'subject' => 'required',
             //     // 'status' => 'required',
@@ -366,57 +369,62 @@ public function getUsers(Request $request)
             //     // 'description' => 'required',
 
             // ]);
+            $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+        
+            $existingRecord = DB::table('crm_tasks')->where('id', $request->id)->first();
 
-            $companyId = session('companyId');
-            $id = str::uuid()->toString();
+           // $companyId = session('companyId');
+            // $id = str::uuid()->toString();
             $data = [
-                "id" => $id,
+                "id" => $request->id,
                 "subject" => $request->subject,
                 "status" => $request->status,
                 "start_date" => $request->start_date,
                 "due_date" => $request->due_date,
                 "related_to_type" => $request->related_to_type,
-                "related_id" => $request->related_ID,
-                "contact_id" => $request->contact_ID,
+                "related_id" => $request->related_id,
+                "contact_id" => $request->contact_id,
                 "priority" => $request->priority,
-                "assigned_to" => $request->assign_ID,
+                "assigned_to" => $request->assigned_to,
                 "description" => $request->description,
-                "company_id" => $companyId,
+                "created_by" => $request->created_by,
+               // "company_id" => $companyId,
                 "created_date" => Carbon::now(),
             ];
-    if ($request->id){
-        $res = DB::table('crm_tasks')->where('id','=',$request->id)->update($data);
-        $message = $res ? 'Task updated successfully' : 'save failed';
-}
-            $res = DB::table('crm_tasks')->insert($data);
-            $message = $res ? 'Task saved successfully' : 'save failed';
-            if ($res) {
+           
+            
+            if ( $existingRecord){
+               
+                $res = DB::table('crm_tasks')->where('id','=',$request->id)->update($data);                
+                $message = $res ? 'Task updated successfully' : 'save failed';
+                }
+            else{
+                    // $id = str::uuid()->toString();
+                    // $data['id'] = $id;
+                    $res = DB::table('crm_tasks')->insert($data);
+                    $message = $res ? 'Task saved successfully' : 'save failed';
+                }
+
                 return response()->json([
-                    'status' => 201,
-                    'message' => 'Task saved successfully',
+                    'status'=> $res ? 201 : 404,
+                    'message'=> $message ,
                 ]);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Task Save Failed',
-                ]);
-            }
         } catch (Exception $e) {
             $data = [
-                'status' => 0,
+                'status' => 500,
                 'result' => false,
-                'message' => $e->getMessage()
+                'message' => 'dd' . $e->getMessage()
             ];
-            return response($data, 404);
         }
     }
 
     public function getTasks(Request $request)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-
+        $userId = $request->userId;
         $tasks = DB::table('crm_tasks')
             ->select('id', 'subject', 'start_date','due_date','status','related_to_type','contact_id', 'priority',  'description','assigned_to')
+            ->where('created_by','=',$userId)
             ->get();
 
         if ($tasks->isEmpty()) {
@@ -432,10 +440,39 @@ public function getUsers(Request $request)
         ]);
     }
 
-    public function saveLeads(Request $request)
+    public function deleteTasks(Request $request)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+    
+        // Check if the note exists
+        $task = DB::table('crm_tasks')->find($request->id);
+        if (!$task) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Task not found',
+            ]);
+        }
+        // Delete the note
+        $res = DB::table('crm_tasks')->where('id', $request->id)->delete();
+        // $res = DB::table('crm_tasks')->where('id', $request->id)->update(['deleted_at' => now()]);
 
+        if ($res) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Task deleted successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to delete task',
+            ]);
+        }
+    }
+
+    public function saveOrUpdateLeads(Request $request)
+    {
+        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+        $existingRecord = DB::table('crm_customers')->where('id', $request->id)->first();
         try {
 
             $request->validate([
@@ -453,12 +490,14 @@ public function getUsers(Request $request)
             $companyId = session('companyId');
             $userId = Auth::id();
             $data = array(
+                "id" => $request->id,
                 "name" => $request->name,
                 // "email" => $request->email,
                 // "phone" => $request->phone,
                 // "address" => $request->address,
                 "category" => $request->category,
                 "note" => $request->note,
+                "assigned_to" => $request->assigned_to,
                 "lead" => 1,
                 "lead_source" => $request->lead_source,
                 "created_by" => $userId,
@@ -467,15 +506,22 @@ public function getUsers(Request $request)
 
             );
 
-            $custId = str::uuid()->toString();
-            $data['id'] = $custId;
-            $data['company_id'] = $companyId;
+          //  $custId = str::uuid()->toString();
+          //  $data['id'] = $custId;
+          //  $data['company_id'] = $companyId;
 
+            if($existingRecord){
+                $res = DB::table('crm_customers')->where('id','=',$request->id)->update($data);
+                $message = $res ? 'Lead updated successfully' : 'update failed';
+            }else{
+                $res = DB::table('crm_customers')->insert($data);
+                $message = $res ? 'Lead saved successfully' : 'save failed';
+            }
 
-            $res = DB::table('crm_customers')->insert($data);
+            $custId  = $request->id;  // recently store/ updated customer id
             $res1 = DB::table('crm_customers_address')->where('cust_id', '=', $custId)->delete();
             $count = is_array($request->phone) ? count($request->phone) : 0;
-
+            
             for ($i = 0; $i < $count; $i++) {
                 $dataAddress = array(
                     "id" => str::uuid()->toString(),
@@ -488,17 +534,11 @@ public function getUsers(Request $request)
                 );
                 $res1 = DB::table('crm_customers_address')->insert($dataAddress);
             }
-            if ($res) {
-                return response()->json([
-                    'status' => 201,
-                    'message' => '  Lead saved successfully',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Saving Lead Failed',
-                ]);
-            }
+          
+            return response()->json([
+                'status'=> $res ? 201 : 404,
+                'message'=> $message ,
+            ]);
         } catch (Exception $e) {
             $data = [
                 'status' => 0,
@@ -533,67 +573,74 @@ public function getUsers(Request $request)
     }
 
 
-    public function saveCalls(Request $request)
+    public function saveOrUpdateCalls(Request $request)
     {
 
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
 
+        $existingRecord = DB::table('crm_calls')->where('id', $request->id)->first();
+
         try {
 
             $request->validate([
-                'subject' => 'required',
-                'status' => 'required',
-                'start_date' => 'required',
-                'end_date' => 'required',
-                'related_to_type' => 'required',
-                'related_id' => 'required',
-                'contact_id' => 'required',
-                'communication_type' => 'required',
-                'assigned_to' => 'required',
-                'description' => 'required',
+                // 'subject' => 'required',
+                // 'status' => 'required',
+                // 'start_date' => 'required',
+                // 'end_date' => 'required',
+                // 'related_to_type' => 'required',
+                // 'related_id' => 'required',
+                // 'contact_id' => 'required',
+                // 'communication_type' => 'required',
+                // 'assigned_to' => 'required',
+                // 'description' => 'required',
 
             ]);
 
-            $id = str::uuid()->toString();
+            // $id = str::uuid()->toString();
 
-            $start_date = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d h:i:s');
-            $end_date = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d h:i:s');
+      //      $start_date = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d h:i:s');
+      //      $end_date = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d h:i:s');
 
             //$start_time = sprintf('%02d:%02d', $request->s_hour[0], $request->s_minute[0]);
             //dd($start_time);
            // $end_time = sprintf('%02d:%02d', $request->e_hour[0], $request->e_minute[0]);
 
-           $companyId = session('companyId');
+         //  $companyId = session('companyId');
             $userId = Auth::id();
             $data = [
-                "id" => $id,
+                "id" => $request->id,
                 "subject" => $request->subject,
                 "status" => $request->status,
-                "start_date" => $start_date ,
-                "end_date" => $end_date ,
+                "start_date" => $request->start_date ,
+                "end_date" => $request->end_date ,
                 "related_to_type" => $request->related_to_type,
-                "related_id" => '001',
-                "contact_id" => $request->contact_ID,
+                "related_id" => $request->related_id,
+                "contact_id" => $request->contact_id,
                 "communication_type" => $request->communication_type,
-                "assigned_to" => $request->assign_ID ? $request->assign_ID : (Auth::check() ? Auth::user()->id : null),
+                "assigned_to" => $request->assigned_to ? $request->assigned_to : (Auth::check() ? Auth::user()->id : null),
+                "created_by" => $request->created_by,
                 "description" => $request->description,
                 // "company_id" => $companyId,
                 "created_at" => Carbon::now(),
                 "updated_at" => Carbon::now(),
             ];
 
-            $res = DB::table('crm_calls')->insert($data);
-            if ($res) {
+            if ( $existingRecord){
+                
+                $res = DB::table('crm_calls')->where('id','=',$request->id)->update($data);
+                $message = $res ? 'Call updated successfully' : 'save failed';
+                }
+            else{
+                    // $id = str::uuid()->toString();
+                    // $data['id'] = $id;
+                    $res = DB::table('crm_calls')->insert($data);
+                    $message = $res ? 'call saved successfully' : 'save failed';
+                }
+
                 return response()->json([
-                    'status' => 201,
-                    'message' => 'Call saved successfully',
+                    'status'=> $res ? 201 : 500,
+                    'message'=> $message ,
                 ]);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Call Save Failed',
-                ]);
-            }
         } catch (Exception $e) {
             $data = [
                 'status' => 0,
@@ -607,9 +654,10 @@ public function getUsers(Request $request)
     public function getCalls(Request $request)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-
+        $userId = $request->userId;
         $calls = DB::table('crm_calls')
             ->select( 'subject', 'start_date', 'status',  'related_to_type','contact_id')
+            ->where('created_by','=',$userId)
             ->get();
 
         if ($calls->isEmpty()) {
@@ -625,50 +673,85 @@ public function getUsers(Request $request)
         ]);
     }
 
-    public function saveContacts(Request $request)
+    public function deleteCalls(Request $request)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+    
+        // Check if the note exists
+        $call = DB::table('crm_calls')->find($request->id);
+        if (!$call) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Call not found',
+            ]);
+        }
+        // Delete the note
+        $res = DB::table('crm_calls')->where('id', $request->id)->delete();
+        // $res = DB::table('crm_tasks')->where('id', $request->id)->update(['deleted_at' => now()]);
+
+        if ($res) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Call deleted successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to delete call',
+            ]);
+        }
+    }
+
+
+    public function saveOrUpdateContacts(Request $request)
+    {
+        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+
+        $existingRecord = DB::table('crm_contacts')->where('id', $request->id)->first();
 
         try{
 
             $userId = Auth::id();
-            $companyId = session('companyId');
+           // $companyId = session('companyId');
             $contact = array(
+                "id" => $request->id,
                 "mr" => $request->type,
                 "first_name" => $request->fname,
                 "last_name" => $request->lname,
                 "title" => $request->title,
                 "related_to_type" => $request->related_to_type,
                 "related_id" => $request->related_ID,
-                "assigned_to" => $request->assign_ID ? $request->assign_ID : (Auth::check() ? Auth::user()->id : null),
+                "assigned_to" => $request->assigned_to ? $request->assigned_to : (Auth::check() ? Auth::user()->id : null),
+                "created_by" => $request->created_by,
                 "mobile" => $request->mobile,
                 "email" => $request->email,
-                "phone_office" => $request->office_phone,
+                "phone_office" => $request->phone_office,
                 // "address"=>$request->address,
                 // "city"=>$request->city,
                 // "state"=>$request->state,
                 // "postal_code"=>$request->postal_code,
                 // "country"=>$request->country,
                 // "description"=>$request->description,
-                "company_id" => $companyId,
-                "user_id" => $userId,
+               // "company_id" => $companyId,
+                 "user_id" => $userId,
                 "created_at" => Carbon::now(),
             );
 
-            $id = str::uuid()->toString();
-            $contact['id'] = $id;
-            $res =  DB::table('crm_contacts')->insert($contact);
-            if ($res) {
-                return response()->json([
-                    'status' => 201,
-                    'message' => 'Contact saved successfully',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Contact Save Failed',
-                ]);
+            // $id = str::uuid()->toString();
+            // $contact['id'] = $id;
+
+            if ($existingRecord) {
+              $res = DB::table('crm_contacts')->where('id','=',$request->id)->update($contact);
+                $message= $res ? 'Contact Updated' : 'update failed';
+            }else{
+               $res = DB::table('crm_contacts')->insert($contact);
+                    $message = $res ? 'Contact saved successfully' : 'save failed';
             }
+            
+                return response()->json([
+                    'status' => $res ? 201 : 404,
+                    'message' => $message,
+                ]);
 
         }catch(Exception $e){
             $data = [
@@ -686,9 +769,10 @@ public function getUsers(Request $request)
     public function getContacts(Request $request)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-
+        $userId = $request->userId;
         $contacts = DB::table('crm_contacts')
             ->select('id', 'first_name', 'last_name', 'mobile',  'email')
+            ->where('created_by','=',$userId)
             ->get();
 
         if ($contacts->isEmpty()) {
@@ -703,53 +787,75 @@ public function getUsers(Request $request)
             'data' => $contacts,
         ]);
     }
-    public function saveCustomers(Request $request)
+    public function saveOrUpdateCustomers(Request $request)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-       
+       $existingRecord = DB::table('crm_customers')->where('id',$request->id)->first();
         // $userId = Auth::id();
          $companyId = session('companyId');
         //$id = str::uuid()->toString();
         $customers = array(
             // "mr" => $request->type,
-             "id" => str::uuid()->toString(),
+             "id" => $request->id,
             "name" => $request->name,
             "category" => $request->category,
             "tax_number" => $request->tax_number ,
             "note" => $request->note,
             "type" => $request->type,
+            "status" => $request->status,
+            "assigned_to" => $request->assigned_to,
             "credit_limit" => $request->credit_limit,
             "credit_amount" => $request->credit_amount,
             "margin" => $request->margin,
             "lead" => $request->lead,
             "lead_source" => $request->lead_source,
            "company_id" => $companyId,
+           "created_by" => $request->created_by,
             "created_at" => Carbon::now(),
+            "deleted_at" => Carbon::now(),
             // "updated_at" => Carbon::now(),
 
         );
-        $res= DB::table('crm_customers')->insert($customers);
 
-        if ($res) {
-            return response()->json([
-                'status' => 201,
-                'message' => 'Customer saved successfully'
-            ]);
-        }else{
-            return response()->json([
-                'status' => 404,
-                'message' => 'Customer save failed'
-            ]);
-        }
+         if ( $existingRecord){
+                
+                $res = DB::table('crm_customers')->where('id','=',$request->id)->update($customers);
+                $message = $res ? 'customer updated successfully' : 'customer failed';
+                }
+            else{
+                    // $id = str::uuid()->toString();
+                    // $data['id'] = $id;
+                    $res = DB::table('crm_customers')->insert($customers);
+                    $message = $res ? 'customer saved successfully' : 'save failed';
+                }
+
+                return response()->json([
+                    'status'=> $res ? 201 : 404,
+                    'message'=> $message ,
+              ]);
+        // if ($res) {
+        //     return response()->json([
+        //         'status' => 201,
+        //         'message' => 'Customer saved successfully'
+        //     ]);
+        // }else{
+        //     return response()->json([
+        //         'status' => 404,
+        //         'message' => 'Customer save failed'
+        //     ]);
+         }
  
-    }
+    
 
     public function getCustomers(Request $request)
     {
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
 
+        $userId = $request->userId;
+        
         $customers = DB::table('crm_customers')
             ->select('id', 'name', 'category', 'note',  'status',  'type')
+            ->where('created_by', '=', $userId)
             ->get();
 
         if ($customers->isEmpty()) {
@@ -779,4 +885,59 @@ public function getUsers(Request $request)
 
          
     }
+    public function saveOrUpdateOpportunity(Request $request){
+        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+        // $id = str::uuid()->toString();
+        $existingRecord = DB::table('crm_opportunities')->where('id',$request->id)->first();
+        $data = [
+            "id" => $request->id,
+            "name" => $request->name,
+            "cust_id" => $request->cust_id,
+            "cur_name" => $request->cur_name,
+            "close_date" =>Carbon::now(),
+            "amount" => $request->amount ,
+            "lead_type" => $request->lead_type,
+            "sale_stage" => '001',
+            "lead_source" => $request->lead_source,
+            "compaign_id" => $request->compaign_id,
+            "next_step" => $request->next_step,
+            "assigned_to" => $request->assign_ID ? $request->assign_ID : (Auth::check() ? Auth::user()->id : null),
+            "description" => $request->description,
+            // "company_id" => $companyId,
+            "created_by"=>$request->created_by,
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now(),
+         ];
+        if($existingRecord){
+             $res = DB::table('crm_opportunities')->where('id','=',$request->id)->update($data);
+             $message = $res ? 'Opptunity updated successfully' : 'update failed';
+            }else{
+                $res = DB::table('crm_opportunities')->insert($data);
+                $message = $res ? 'Opptunity saved successfully' : 'save failed';
+            }
+               return response()->json([
+                'status' => $res ? 201:404,
+                'message' => $message,
+               ]);
+}
+  public function getOpportunity(Request $request){
+  $userId = $request->userId;
+    $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+  
+
+   $res = DB::table('crm_opportunities')
+   ->where('created_by', '=', $userId)
+   ->get();
+   if($res->isEmpty()){
+      return response()->json([
+        'status' => 404,
+        'message' => 'No Opportunity found'
+      ]);
+   }
+
+   return response()->json([
+    'status' => 200,
+    'message' => $res,
+   ]);
+  }
 }
