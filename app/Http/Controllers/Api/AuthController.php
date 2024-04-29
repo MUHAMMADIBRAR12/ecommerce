@@ -81,7 +81,7 @@ class AuthController extends Controller
 
         if ($user) {
             $response = [
-                'status' => 200,
+                'status' => 200,  
                 'result' => true,
                 'message' => 'User created successfully',
                 'user' => $user,
@@ -212,6 +212,7 @@ public function getUsers(Request $request)
             'assigned_to' => $request->assign_ID,
             'description' => $request->description,
             // "company_id" => $companyId,
+            // 'created_at' => $request->created_at,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
@@ -423,7 +424,7 @@ public function getUsers(Request $request)
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
         $userId = $request->userId;
         $tasks = DB::table('crm_tasks')
-            ->select('id', 'subject', 'start_date','due_date','status','related_to_type','contact_id', 'priority',  'description','assigned_to')
+            ->select('id', 'subject', 'start_date','due_date','status','related_to_type','related_id','contact_id', 'priority',  'description','assigned_to')
             ->where('created_by','=',$userId)
             ->get();
 
@@ -555,9 +556,11 @@ public function getUsers(Request $request)
         $userId = $request->userId;
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
         $leads = DB::table('crm_customers')
-            ->where('lead', '=','1')
-            ->where('created_by', '=', $userId)
-            ->get();
+        ->leftJoin('crm_customers_address', 'crm_customers.id', '=', 'crm_customers_address.cust_id')
+        ->select('crm_customers.*', 'crm_customers_address.*')
+        ->where('crm_customers.lead', '=', 1)
+        ->where('crm_customers.created_by', '=', $userId)
+        ->get();
 
         if ($leads->isEmpty()) {
             return response()->json([
@@ -656,7 +659,7 @@ public function getUsers(Request $request)
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
         $userId = $request->userId;
         $calls = DB::table('crm_calls')
-            ->select( 'subject', 'start_date', 'status',  'related_to_type','contact_id')
+            ->select( 'subject', 'start_date','end_date', 'status',  'related_to_type','contact_id','description','related_id','communication_type','assigned_to')
             ->where('created_by','=',$userId)
             ->get();
 
@@ -726,13 +729,13 @@ public function getUsers(Request $request)
                 "mobile" => $request->mobile,
                 "email" => $request->email,
                 "phone_office" => $request->phone_office,
-                // "address"=>$request->address,
-                // "city"=>$request->city,
-                // "state"=>$request->state,
-                // "postal_code"=>$request->postal_code,
-                // "country"=>$request->country,
-                // "description"=>$request->description,
-               // "company_id" => $companyId,
+                "primary_address"=>$request->address,
+                "primary_city"=>$request->city,
+                "primary_state"=>$request->state,
+                "primary_postal_code"=>$request->postal_code,
+                "primary_country"=>$request->country,
+                "description"=>$request->description,
+            //    "company_id" => $companyId,
                  "user_id" => $userId,
                 "created_at" => Carbon::now(),
             );
@@ -854,7 +857,8 @@ public function getUsers(Request $request)
         $userId = $request->userId;
         
         $customers = DB::table('crm_customers')
-            ->select('id', 'name', 'category', 'note',  'status',  'type')
+            ->leftJoin('crm_cstom_add', crm_customers.id, '=', crm_cstom_add.cust_d)
+            ->select('id', 'name', 'category', 'note',  'status',  'type', adress, hone , cell)
             ->where('created_by', '=', $userId)
             ->get();
 

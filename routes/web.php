@@ -32,12 +32,14 @@ Route::get('/', 'AuthenticationController@homemain');
 // Route::('individual/login', 'web.Auth.individuallogin')->name('individual.login');
 // Route::post('/individual/create', [IndividualController::class, 'individual_Create'])->name('individual.create');
 Route::get('individual', 'webControllers\IndividualController@individualReg')->name('individual.login');
-Route::match(['get','post'],'individual/create', 'webControllers\IndividualController@individualCreate')->name('individual.create');
+Route::post('individual/create', 'webControllers\IndividualController@individualCreate')->name('individual.create');
 
 // Route::get('individual/login', function () {
 //     return redirect('individual/login');
+Route::get('individual', 'webControllers\IndividualController@individualReg')->name('individual.login');
 
-Route::View('individualbusiness', 'web.individualbusiness')->name('individualbusiness.login');
+Route::post('individualbusiness/create', 'webControllers\IndividualBusinessController@individualCreate')->name('individualbusiness.create');
+// Route::View('individualbusiness', 'web.individualbusiness')->name('individualbusiness.login');
 Route::View('business', 'web.business')->name('business.login');
 Route::View('select', 'web.select')->name('select.login');
 Route::View('company', 'web.company')->name('company.login');

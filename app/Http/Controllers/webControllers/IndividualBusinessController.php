@@ -11,4 +11,8 @@ class IndividualBusinessController extends Controller
     public function individualReg(){
         return view('web.Auth.individualbusiness');
     }
+
+    public function individualCreate(Request $request){
+        return view('web.Auth.individualbusiness');
+    }
 }

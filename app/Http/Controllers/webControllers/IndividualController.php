@@ -14,18 +14,18 @@ class IndividualController extends Controller
     }
     public function individualCreate(Request $request)
     {
-        return view('web.Auth.individuallogin');
-        dd($request->all());
-        exit();
-        $request->validate([
-            'first_name' => 'required|max:50',
-            'last_name' => 'required|max:50',
-            'phone' => 'nullable|numeric',
-            'email' => 'required|email|max:50',
-            'country' => 'required|max:50',
-            'state' => 'required|max:50',
-            'zip' => 'required|max:50',
-        ]);
+        // return view('web.Auth.individuallogin');
+        // dd($request->all());
+        // exit();
+        // $request->validate([
+        //     'first_name' => 'required|max:50',
+        //     'last_name' => 'required|max:50',
+        //     'phone' => 'nullable|numeric',
+        //     'email' => 'required|email|max:50',
+        //     'country' => 'required|max:50',
+        //     'state' => 'required|max:50',
+        //     'zip' => 'required|max:50',
+        // ]);
 
         // Insert the data into the database using query builder
         $data = DB::connection('mysql1')->table('reg_individuals')->insert([
@@ -34,7 +34,7 @@ class IndividualController extends Controller
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),
             'country' => $request->input('country'),
-            'state' => $request->input('state'),
+            // 'state' => $request->input('state'),
             'zip' => $request->input('zip'),
         ]);
 

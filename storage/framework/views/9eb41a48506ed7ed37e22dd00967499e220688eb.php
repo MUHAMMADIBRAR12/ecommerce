@@ -61,7 +61,7 @@ margin: auto;
              <!-- <?php echo e(@csrf_field()); ?> -->
             <div class="header">
                 <!-- <img class="logo" src="<?php echo e(asset('public/assets/images/logo2.png')); ?>" alt=""> -->
-                <h1 class="blue text-center mt-5">Log in</h1>
+                <h1 class="blue mt-5">Log in</h1>
                 <?php if(Session::has('message')): ?>
 	            <div class="text-danger"><?php echo e(Session::get('message')); ?></div>
                 <?php endif; ?>

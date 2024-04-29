@@ -237,7 +237,10 @@ text-decoration: none;
                                     </div>
                                     <div class="input-control text-center ml-5" >
                                         
-                                     <button type="submit" name="submit" class="btn btn-primary">Submit</button> 
+                                        <a href="individualbusiness.create">
+                                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                        </a>
+                                        
                                     
                                     </div>
                                 </div>

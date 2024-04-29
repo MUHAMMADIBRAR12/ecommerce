@@ -237,8 +237,11 @@ text-decoration: none;
                                         </div>
                                     </div>
                                     <div class="input-control text-center ml-5" >
-                                        {{--  <a class="btn btn-primary" type="submit"name="submit" href="#">create Account</a>  --}}
-                                     <button type="submit" name="submit" class="btn btn-primary">Submit</button> 
+                                        {{--  <a class="btn btn-primary" type="submit"name="submit" href="individualbusiness.create">create Account</a>  --}}
+                                        <a href="individualbusiness.create">
+                                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                        </a>
+                                        
                                     {{--  <input type="submit" class="input-submit orange" value="Create Account" style="    margin: auto;">   --}}
                                     </div>
                                 </div>
