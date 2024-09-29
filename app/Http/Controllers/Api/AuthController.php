@@ -197,7 +197,7 @@ public function getUsers(Request $request)
     ]);
 }
 
-   public function saveOrUpdateNote(Request $request)
+   public function  saveOrUpdateNote(Request $request)
     {
      $this->dbconn($request->db_name, $request->db_username, $request->db_password);
      // check if id exisit
@@ -493,9 +493,6 @@ public function getUsers(Request $request)
             $data = array(
                 "id" => $request->id,
                 "name" => $request->name,
-                // "email" => $request->email,
-                // "phone" => $request->phone,
-                // "address" => $request->address,
                 "category" => $request->category,
                 "note" => $request->note,
                 "assigned_to" => $request->assigned_to,
@@ -507,9 +504,9 @@ public function getUsers(Request $request)
 
             );
 
-          //  $custId = str::uuid()->toString();
-          //  $data['id'] = $custId;
-          //  $data['company_id'] = $companyId;
+            $custId = $request->id;
+            // $data['id'] = $custId;
+            $data['company_id'] = $companyId;
 
             if($existingRecord){
                 $res = DB::table('crm_customers')->where('id','=',$request->id)->update($data);
@@ -517,25 +514,29 @@ public function getUsers(Request $request)
             }else{
                 $res = DB::table('crm_customers')->insert($data);
                 $message = $res ? 'Lead saved successfully' : 'save failed';
-            }
+            } 
 
             $custId  = $request->id;  // recently store/ updated customer id
+            // dd($custId);
             $res1 = DB::table('crm_customers_address')->where('cust_id', '=', $custId)->delete();
-            $count = is_array($request->phone) ? count($request->phone) : 0;
-            
-            for ($i = 0; $i < $count; $i++) {
+          //  dd($res1);
+            //$count = count($request->phone) ? count($request->phone) : 0;
+          // dd($count);
+          if($request->phone)            
+          {
                 $dataAddress = array(
                     "id" => str::uuid()->toString(),
                     "cust_id" => $custId,
-                    "address" => $request->address[$i],
-                    "phone" => $request->phone[$i],
-                    "email" => $request->email[$i],
-                    "fax" => $request->fax[$i],
+                    "address" => $request->address,
+                    "phone" => $request->phone,
+                    "email" => $request->email,
+                    "fax" => $request->fax,
                     "status" => 1,
                 );
+            //
                 $res1 = DB::table('crm_customers_address')->insert($dataAddress);
             }
-          
+           
             return response()->json([
                 'status'=> $res ? 201 : 404,
                 'message'=> $message ,
@@ -557,7 +558,8 @@ public function getUsers(Request $request)
         $this->dbconn($request->db_name, $request->db_username, $request->db_password);
         $leads = DB::table('crm_customers')
         ->leftJoin('crm_customers_address', 'crm_customers.id', '=', 'crm_customers_address.cust_id')
-        ->select('crm_customers.*', 'crm_customers_address.*')
+        //->select('crm_customers.*', 'crm_customers_address.*')
+        ->select('crm_customers.id', 'crm_customers.name', 'crm_customers.assigned_to','crm_customers.created_by','crm_customers.category','crm_customers.lead_source','crm_customers.status','crm_customers.type','crm_customers.note','crm_customers.lead','crm_customers_address.address','crm_customers.lead_source','crm_customers.status','crm_customers.type','crm_customers.note','crm_customers.lead','crm_customers_address.email','crm_customers.lead_source','crm_customers.status','crm_customers.type','crm_customers.note','crm_customers.lead','crm_customers_address.phone')
         ->where('crm_customers.lead', '=', 1)
         ->where('crm_customers.created_by', '=', $userId)
         ->get();
@@ -852,16 +854,17 @@ public function getUsers(Request $request)
 
     public function getCustomers(Request $request)
     {
-        $this->dbconn($request->db_name, $request->db_username, $request->db_password);
+        $this->dbconn($request->db_name, $request->db_username, $request->db_password); 
 
         $userId = $request->userId;
         
         $customers = DB::table('crm_customers')
-            ->leftJoin('crm_cstom_add', crm_customers.id, '=', crm_cstom_add.cust_d)
-            ->select('id', 'name', 'category', 'note',  'status',  'type', adress, hone , cell)
+            ->leftJoin('crm_customers_address', 'crm_customers.id', '=', 'crm_customers_address.cust_id')
+            //->select('crm_customers.*', 'crm_customers_address.*')
+            ->select('crm_customers.id', 'crm_customers.name', 'crm_customers.assigned_to','crm_customers.created_by','crm_customers.category','crm_customers.lead_source','crm_customers.status','crm_customers.type','crm_customers.note','crm_customers.lead','crm_customers_address.address','crm_customers.lead_source','crm_customers.status','crm_customers.type','crm_customers.note','crm_customers.lead','crm_customers_address.email','crm_customers.lead_source','crm_customers.status','crm_customers.type','crm_customers.note','crm_customers.lead','crm_customers_address.phone')
             ->where('created_by', '=', $userId)
             ->get();
-
+    
         if ($customers->isEmpty()) {
             return response()->json([
                 'status' => 404,
@@ -927,9 +930,8 @@ public function getUsers(Request $request)
   public function getOpportunity(Request $request){
   $userId = $request->userId;
     $this->dbconn($request->db_name, $request->db_username, $request->db_password);
-  
-
-   $res = DB::table('crm_opportunities')
+   
+    $res = DB::table('crm_opportunities')
    ->where('created_by', '=', $userId)
    ->get();
    if($res->isEmpty()){
